@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import { Formik, Field, Form } from 'formik';
 import { connect } from 'react-redux';
 import { addNewUser } from '../../ducks/users';
-import * as yup from 'yup';
-
-const schema = yup.object().shape({
-    name: yup.string().required(),
-    email: yup.string().required(),
-    lastName: yup.string().length(3)
-});
+import * as Yup from 'yup';
 
 class AddUserForm extends Component {
     render() {
@@ -22,39 +16,44 @@ class AddUserForm extends Component {
                         lastName: '',
                         email: ''
                     }}
-                    onSubmit={(values) => {
+                    onSubmit={(values, actions) => {
                         addNewUser(values);
-                        console.log(values);
+                        actions.resetForm();
                     }}
-                    validationSchema={schema}
-                    render={({ handleSubmit, handleReset, errors }) => (
+                    validationSchema={Yup.object().shape({
+                        name: Yup.string().required(),
+                        email: Yup.string().required(),
+                        lastName: Yup.string().min(3)
+                    })}
+                    render={({ handleSubmit, errors, touched }) => (
                         <Form
                             onSubmit={handleSubmit}
-                            onReset={handleReset}
                         >
                             <div>
                                 <label>
                                     <Field name='name' placaholder='Name' />
                                     Name
                             </label>
-                            <div>{errors.name}</div>
+                            {errors.name && touched.name && <div>{errors.name}</div>}
                             </div>
                             <div>
                                 <label>
                                     <Field name='lastName' placaholder='LastName' />
                                     LastName
                             </label>
-                            <div>{errors.name}</div>
+                            {errors.lastName && touched.lastName && <div>{errors.lastName}</div>}
                             </div>
                             <div>
                                 <label>
                                     <Field type='email' name='email' placaholder='Email' />
                                     Email
                             </label>
-                            <div>{errors.name}</div>
+                            {errors.email && touched.email && <div>{errors.email}</div>}
                             </div>
                             <div>
-                                <input type='submit' />
+                                <input 
+                                    type='submit'
+                                />
                             </div>
                         </Form>
                     )}
