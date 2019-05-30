@@ -18,7 +18,7 @@ it('shuld dispatch person with id', () => {
 
     const id = generateId();
 
-    expect(saga.next().value).toEqual(put({
+    expect(saga.next(id).value).toEqual(put({
         type: ADD_USER,
         payload: {id, ...user}
     }))
