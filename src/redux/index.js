@@ -3,11 +3,16 @@ import reducer from './reduser';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import {routerMiddleware} from 'react-router-redux';
-import history from '../history'
+import createSagaMiddleware from 'redux-saga';
+import history from '../history';
+import {saga} from '../ducks/users'
 
-const enhancer = applyMiddleware(routerMiddleware(history), thunk, logger);
+const sagaMiddlaware = createSagaMiddleware();
+const enhancer = applyMiddleware(sagaMiddlaware, routerMiddleware(history), thunk, logger);
 
 const store = createStore(reducer(history), enhancer);
 window.store = store;
+
+sagaMiddlaware.run(saga);
 
 export default store;
