@@ -25,10 +25,8 @@ class AddUserForm extends Component {
                         email: Yup.string().required(),
                         lastName: Yup.string().min(3)
                     })}
-                    render={({ handleSubmit, errors, touched }) => (
-                        <Form
-                            onSubmit={handleSubmit}
-                        >
+                    render={({ errors, touched }) => (
+                        <Form>
                             <div>
                                 <label>
                                     <Field name='name' placaholder='Name' />

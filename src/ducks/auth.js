@@ -1,7 +1,7 @@
 import { appName } from '../config';
 import firebase from 'firebase';
 import { Record } from 'immutable';
-import { all, call, take, put } from 'redux-saga/effects'
+import { all, call, take, put, cps } from 'redux-saga/effects'
 
 const ReduserRecord = Record({
     user: null,
@@ -70,6 +70,19 @@ const signUpSaga = function* () {
             });
 
         }
+    };
+};
+
+export const watchStatusChange = function* () {
+    const auth = firebase.auth();
+
+    try {
+        const user = yield cps([auth, auth.onAuthStateChanged]);
+    } catch (user) {
+        yield put({
+            type: SIGN_UP_SUCCESS,
+            payload: { user }
+        });
     }
 };
 
@@ -84,5 +97,6 @@ firebase.auth().onAuthStateChanged(user => {
 export const saga = function* () {
     yield all([
         signUpSaga(),
+        watchStatusChange()
     ]);
 };
