@@ -12,7 +12,6 @@ export default function reduser(state = [], action) {
 
     switch (type) {
         case ADD_USER:
-                console.log('test3', payload) 
             return [...state, payload]
         
         default: 
@@ -21,7 +20,6 @@ export default function reduser(state = [], action) {
 };
 
 export function addNewUser(person) {
-    console.log('ADD_USER_REQUEST')
     return {
         type:  ADD_USER_REQUEST,
         payload: person
@@ -30,7 +28,6 @@ export function addNewUser(person) {
 
 export const addNewUserSaga = function*(action) {
     const id = yield call(generateId);
-    console.log('ADD_USER')
     yield put({
         type: ADD_USER,
         payload: {...action.payload, id: id}
@@ -38,6 +35,5 @@ export const addNewUserSaga = function*(action) {
 };
 
 export const saga = function*() {
-    console.log('ADD_USER_REQUEST --- listener')
     yield takeEvery(ADD_USER_REQUEST, addNewUserSaga)
 };
