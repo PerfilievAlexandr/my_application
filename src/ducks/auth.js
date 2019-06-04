@@ -30,7 +30,6 @@ export default function reduser(state = new ReduserRecord, action) {
             return state.set('loading', true)
 
         case SIGN_IN_SUCCESS:
-            console.log(payload.user, '++++++++++++++++++++++++++++++++++++++++')
             return state
                 .set('loading', false)
                 .set('user', payload.user)

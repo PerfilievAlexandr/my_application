@@ -5,6 +5,7 @@ import AuthPage from './routes/AuthPage';
 import ProtectedRoute from './common/ProtectedRoute';
 import {moduleName, signOut} from '../ducks/auth';
 import {connect} from 'react-redux';
+import EventsPage from './routes/EventsPage'
 
 class Root extends Component {
     render() {
@@ -16,6 +17,7 @@ class Root extends Component {
             <div>
                 {btn}
                 <ProtectedRoute path='/admin' component={AdminPage} />
+                <ProtectedRoute path='/events' component={EventsPage} />
                 <Route path='/auth' component={AuthPage} />
             </div>
         );
