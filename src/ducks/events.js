@@ -1,6 +1,8 @@
 import { appName } from '../config';
 import { put, all, call, take } from 'redux-saga/effects';
-import firebase from 'firebase'
+import firebase from 'firebase';
+import {createSelector} from 'reselect';
+import {idAdder} from './utils'
 
 /**
  * Constants
@@ -32,11 +34,12 @@ export default function reduser(state = initialState, action) {
             }
 
         case FETCH_ALL_SUCCESS:
+
             return {
                 ...state,
                 loading: false,
                 loaded: true,
-                entites: payload
+                entites: idAdder(payload)
             }
 
         default:
@@ -47,6 +50,11 @@ export default function reduser(state = initialState, action) {
 /**
  * Selectors
  */
+
+    export const stateSelector = state => state[moduleName];
+    export const entitesSelector = createSelector(stateSelector, state => state.entites);
+    export const entitesListSelector = createSelector(entitesSelector, entites => console.log(Object.values(entites)));
+
 
 /**
 * Action Creators

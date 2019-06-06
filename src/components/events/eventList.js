@@ -1,23 +1,45 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {moduleName, fetchAll} from '../../ducks/events'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { moduleName, fetchAll, entitesSelector } from '../../ducks/events';
+import Loader from '../common/Loader'
 
 class EventList extends Component {
-    render() {
-        console.log('-----', this.props.events)
-        return (
-            <div>
-                <h1>Events page!</h1>
-            </div>
-        );
-    };
 
     componentDidMount() {
         this.props.fetchAll();
     };
 
+    render() {
+        if (this.props.loading) return <Loader />
+        return (
+            <div>
+                <table>
+                    <tbody>
+                        {this.getRows()}
+                    </tbody>
+                </table>
+            </div>
+        );
+    };
+
+    getRows() {
+        const {events} = this.props;
+        if (events) {
+            const arrOfEvents = Object.values(events)
+            return arrOfEvents.map(event => (
+                <tr key={event.id}>
+                    <td>{event.title}</td>
+                    <td>{event.where}</td>
+                    <td>{event.month}</td>
+                </tr>
+            ));
+        } else {
+            null
+        }
+    }
 }
 
 export default connect(state => ({
-    events: state[moduleName].entities
-}), {fetchAll})(EventList);
+    events: entitesSelector(state),
+    loading: state[moduleName].loading
+}), { fetchAll })(EventList);

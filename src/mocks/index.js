@@ -6,8 +6,7 @@ function saveEventsToFB() {
     conferences.forEach(conference => eventsRef.push(conference));
 };
 
-window.runMigration = function () {
-    
+window.runMigration = function () { 
     return firebase.database().ref('/events').on('value', data => {
         if (!data.val()) saveEventsToFB();
     });
