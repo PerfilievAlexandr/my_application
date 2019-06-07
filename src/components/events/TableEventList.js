@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { moduleName, fetchAll, entitesSelector } from '../../ducks/events';
+import { moduleName, fetchAll, entitesSelector, selectedEvent } from '../../ducks/events';
 import Loader from '../common/Loader'
 
-class EventList extends Component {
+class TableEventList extends Component {
 
     componentDidMount() {
         this.props.fetchAll();
@@ -22,12 +22,15 @@ class EventList extends Component {
         );
     };
 
-    getRows() {
-        const {events} = this.props;
+    getRows = () => {
+        const { events } = this.props;
         if (events) {
             const arrOfEvents = Object.values(events)
             return arrOfEvents.map(event => (
-                <tr key={event.id}>
+                <tr
+                    key={event.id}
+                    onClick={this.onhandleClick(event.id)}
+                >
                     <td>{event.title}</td>
                     <td>{event.where}</td>
                     <td>{event.month}</td>
@@ -37,9 +40,14 @@ class EventList extends Component {
             null
         }
     }
+
+    onhandleClick = (id) => () => {
+        const {selectedEvent} = this.props;
+        selectedEvent && selectedEvent(id)
+    }
 }
 
 export default connect(state => ({
     events: entitesSelector(state),
     loading: state[moduleName].loading
-}), { fetchAll })(EventList);
+}), { fetchAll, selectedEvent })(TableEventList);

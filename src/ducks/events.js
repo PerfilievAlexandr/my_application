@@ -2,7 +2,7 @@ import { appName } from '../config';
 import { put, all, call, take } from 'redux-saga/effects';
 import firebase from 'firebase';
 import {createSelector} from 'reselect';
-import {idAdder} from './utils'
+import {idAdder, addEventToArr} from './utils'
 
 /**
  * Constants
@@ -12,9 +12,11 @@ const prefix = `${appName}/${moduleName}`;
 
 export const FETCH_ALL_REQUEST = `${prefix}/FETCH_ALL_REQUEST`;
 export const FETCH_ALL_SUCCESS = `${prefix}/FETCH_ALL_SUCCESS`;
+export const SELECT_EVENT = `${prefix}/SELECT_EVENT`;
 
 const initialState = {
     entites: null,
+    selected: [],
     loading: false,
     loaded: false
 };
@@ -42,6 +44,12 @@ export default function reduser(state = initialState, action) {
                 entites: idAdder(payload)
             }
 
+        case SELECT_EVENT:
+            return {
+                ...state,
+                selected: addEventToArr(state.selected, payload)
+            }
+
         default:
             return state
     };
@@ -53,7 +61,7 @@ export default function reduser(state = initialState, action) {
 
     export const stateSelector = state => state[moduleName];
     export const entitesSelector = createSelector(stateSelector, state => state.entites);
-    export const entitesListSelector = createSelector(entitesSelector, entites => console.log(Object.values(entites)));
+    //export const entitesListSelector = createSelector(entitesSelector, entites => console.log(Object.values(entites)));
 
 
 /**
@@ -63,6 +71,13 @@ export default function reduser(state = initialState, action) {
 export function fetchAll() {
     return {
         type: FETCH_ALL_REQUEST
+    }
+};
+
+export function selectedEvent(id) {
+    return {
+        type: SELECT_EVENT,
+        payload: id
     }
 };
 

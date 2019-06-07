@@ -8,3 +8,13 @@ export function idAdder(data) {
     });
     return Object.fromEntries(dataWithIdArr)
 };
+
+export function addEventToArr(eventsArr, event) {
+    const findEventIndex = eventsArr.findIndex(el => el === event);
+    if (findEventIndex === -1) {
+        eventsArr.push(event)
+    } else {
+        eventsArr.splice(findEventIndex, 1)
+    };
+    return eventsArr;
+}
