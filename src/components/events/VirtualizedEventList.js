@@ -22,6 +22,7 @@ class VirtualizedEventList extends Component {
                 headerHeight={50}
                 width={700}
                 height={600}
+                onRowClick={this.onhandleClick}
             >
                 <Column
                     dataKey='title'
@@ -47,28 +48,10 @@ class VirtualizedEventList extends Component {
         return Object.values(events)[index];
     }
 
-    getRows = () => {
-        const { events } = this.props;
-        if (events) {
-            const arrOfEvents = Object.values(events)
-            return arrOfEvents.map(event => (
-                <tr
-                    key={event.id}
-                    onClick={this.onhandleClick(event.id)}
-                >
-                    <td>{event.title}</td>
-                    <td>{event.where}</td>
-                    <td>{event.month}</td>
-                </tr>
-            ));
-        } else {
-            null
-        }
-    }
-
-    onhandleClick = (id) => () => {
+    onhandleClick = (evt) => {
         const { selectedEvent } = this.props;
-        selectedEvent && selectedEvent(id)
+        console.log(evt.rowData.id)
+        selectedEvent(evt.rowData.id)
     }
 }
 
